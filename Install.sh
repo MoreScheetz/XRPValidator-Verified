@@ -10,6 +10,53 @@ set -o nounset
 set -o errexit
 set -eu
 
+# User Prompts======================================================================
+
+
+clear
+echo 'Welcome to Rippled Validator installer!'
+echo
+echo "I need to ask you a few questions before starting the setup."
+echo "You can leave the default options and just press enter if you are ok with them."
+echo
+
+
+# Server Ip Address
+echo "[+] First, provide the IPv4 address of the network interface"
+# Autodetect IP address and pre-fill for the user
+IP=$(ip addr | grep 'inet' | grep -v inet6 | grep -vE '127\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | grep -oE '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | head -1)
+read -p "IP address: " -e -i $IP IP
+# If $IP is a private IP address, the server must be behind NAT
+if echo "$IP" | grep -qE '^(10\.|172\.1[6789]\.|172\.2[0-9]\.|172\.3[01]\.|192\.168)'; then
+    echo
+    echo "This server is behind NAT. What is the public IPv4 address?"
+    read -p "Public IP address: " -e PUBLICIP
+fi
+
+# Hostname
+echo "[+] What is your Validator hostname?"
+read -p "Hostname: " -e -i validator.example.com HOSTNAME
+if [[ -z "$HOSTNAME" ]]; then
+   printf '%s\n' "No Hostname entered , exiting ..."
+   exit 1
+fi
+
+# Set hostname 
+hostnamectl set-hostname $HOSTNAME
+
+
+# Email for certbot
+echo "[+] What is your Email address ?"
+read -p "Email: " -e EMAIL
+
+if [[ -z "$EMAIL" ]]; then
+    printf '%s\n' "No Email entered, exiting..."
+    exit 1
+fi
+
+
+#=============================================================================User Prompts
+
 # Installer Docker Validator ==================================================================
 
 docker run -dit --name rippledvalidator -p 51235:51235 -v /keystore/:/keystore/ xrptipbot/rippledvalidator
@@ -39,49 +86,6 @@ function coloredEcho(){
 }
 
 # ============================================== Functions
-
-
-clear
-echo 'Welcome to Rippled Validator installer!'
-echo
-echo "I need to ask you a few questions before starting the setup."
-echo "You can leave the default options and just press enter if you are ok with them."
-echo
-
-
-# Server Ip Address
-echo "[+] First, provide the IPv4 address of the network interface"
-# Autodetect IP address and pre-fill for the user
-IP=$(ip addr | grep 'inet' | grep -v inet6 | grep -vE '127\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | grep -oE '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | head -1)
-read -p "IP address: " -e -i $IP IP
-# If $IP is a private IP address, the server must be behind NAT
-if echo "$IP" | grep -qE '^(10\.|172\.1[6789]\.|172\.2[0-9]\.|172\.3[01]\.|192\.168)'; then
-    echo
-    echo "This server is behind NAT. What is the public IPv4 address?"
-    read -p "Public IP address: " -e PUBLICIP
-fi
-
-# Hostname
-echo "[+] What is your Validator hostname?"
-read -p "Hostname: " -e -i codius.example.com HOSTNAME
-if [[ -z "$HOSTNAME" ]]; then
-   printf '%s\n' "No Hostname entered , exiting ..."
-   exit 1
-fi
-
-# Set hostname 
-hostnamectl set-hostname $HOSTNAME
-
-
-# Email for certbot
-echo "[+] What is your Email address ?"
-read -p "Email: " -e EMAIL
-
-if [[ -z "$EMAIL" ]]; then
-    printf '%s\n' "No Email entered, exiting..."
-    exit 1
-fi
-
 
 # CertBOt ==============================================
 
@@ -147,7 +151,7 @@ location / {
     proxy_set_header Host $$host;
     proxy_set_header X-Forwarded-For $$remote_addr;
   }
-}"
+}" > /etc/nginx/conf.d/validator.conf
 
 
 if pgrep systemd-journal; then
@@ -157,3 +161,17 @@ else
 fi
 
 # ============================================== Nginx
+
+
+coloredEcho "\n[!]Congratulations , it's look like Rippled Validator installed successfuly!" green
+
+coloredEcho "\n[!]Now for Verification!" green
+
+
+#FW Change=====================================
+
+ufw insert 1 allow in on eth0 to any port 80 proto tcp
+
+#=======================================FW Change
+
+
