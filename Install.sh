@@ -47,7 +47,7 @@ ufw insert 1 allow in on eth0 to any port 80 proto tcp
 docker run --rm -it -v /keystore/:/keystore/ -p 80:80 xrptipbot/verify-rippledvalidator
 
 #================================================Install Docker Verification
-
+sudo apt-get update
 #Nginx ==============================================
 
 coloredEcho "\n[!] Installing Nginx ...\n" green
