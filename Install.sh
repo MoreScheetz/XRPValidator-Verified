@@ -70,8 +70,8 @@ fi
 
 echo "server {
   listen 443 ssl;
-  ssl_certificate /keystore/$HOSTNAME-fullchain.pem;
-  ssl_certificate_key /keystore/$HOSTNAME-privkey.pem;
+  ssl_certificate /keystore/$dnsdomainname-fullchain.pem;
+  ssl_certificate_key /keystore/$dnsdomainname-privkey.pem;
   ssl_protocols TLSv1.2;
   ssl_prefer_server_ciphers on;
   ssl_dhparam /etc/nginx/dhparam.pem;
@@ -98,6 +98,12 @@ else
 fi
 
 # ============================================== Nginx
+
+#Key Signing=====================
+
+docker exec rippledvalidator /keystore/finish_signing
+
+#============================================Key Signing
 
 
 coloredEcho "\n[!]Congratulations , it's look like Rippled Validator installed successfuly!" green
