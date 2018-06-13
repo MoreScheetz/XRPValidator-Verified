@@ -126,7 +126,6 @@ echo "server {
   ssl_certificate_key /etc/letsencrypt/live/$HOSTNAME/privkey.pem;
   ssl_protocols TLSv1.2;
 
-  }
 }" > /etc/nginx/conf.d/validator.conf
 
 
