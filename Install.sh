@@ -101,7 +101,8 @@ certbot certonly --manual -d "${HOSTNAME}" -d "*.${HOSTNAME}" --agree-tos --emai
 
 coloredEcho "\n[!] Installing Nginx ...\n" green
 # Nginx
-sudo yum install -y nginx
+sudo apt-get update
+sudo apt-get install nginx
 
 if pgrep systemd-journal; then
     systemctl enable nginx
