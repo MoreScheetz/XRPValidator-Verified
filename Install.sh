@@ -40,15 +40,27 @@ function coloredEcho(){
 
 # ============================================== Functions
 
-# Install Docker Verification==============================
 
-ufw insert 1 allow in on eth0 to any port 80 proto tcp
+# CertBOt ==============================================
 
-docker run --rm -it -v /keystore/:/keystore/ -p 80:80 xrptipbot/verify-rippledvalidator
+coloredEcho "\n[+] Generating certificate for ${HOSTNAME}\n" green
+# certbot stuff
+[ -d certbot ] && rm -rf certbot
+git clone https://github.com/certbot/certbot
+cd certbot
+git checkout v0.23.0
+./certbot-auto --noninteractive --os-packages-only
+./tools/venv.sh > /dev/null
+sudo ln -sf `pwd`/venv/bin/certbot /usr/local/bin/certbot
+certbot certonly --manual -d "${HOSTNAME}" -d "*.${HOSTNAME}" --agree-tos --email "${EMAIL}" --preferred-challenges dns-01  --server https://acme-v02.api.letsencrypt.org/directory
 
-#================================================Install Docker Verification
-sudo apt-get update
+# ============================================== CertBOt
+
+
+
 #Nginx ==============================================
+
+sudo apt-get update
 
 coloredEcho "\n[!] Installing Nginx ...\n" green
 # Nginx
@@ -66,9 +78,6 @@ fi
 
 echo 'return 301 https://$host$request_uri;' | sudo tee /etc/nginx/default.d/ssl-redirect.conf
 sudo openssl dhparam -out /etc/nginx/dhparam.pem 2048
-
-read -p '  Hostname: ' hostname
-hostname=$(printf "\n$hostname"|tr -d '[:space:]')
 
 if [[ ! -e /etc/nginx/conf.d ]]; then
 	mkdir /etc/nginx/conf.d
