@@ -40,6 +40,38 @@ function coloredEcho(){
 
 # ============================================== Functions
 
+clear
+echo 'Welcome to codius installer!'
+echo
+echo "I need to ask you a few questions before starting the setup."
+echo "You can leave the default options and just press enter if you are ok with them."
+echo
+
+
+# Server Ip Address
+echo "[+] First, provide the IPv4 address of the network interface"
+# Autodetect IP address and pre-fill for the user
+IP=$(ip addr | grep 'inet' | grep -v inet6 | grep -vE '127\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | grep -oE '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | head -1)
+read -p "IP address: " -e -i $IP IP
+# If $IP is a private IP address, the server must be behind NAT
+if echo "$IP" | grep -qE '^(10\.|172\.1[6789]\.|172\.2[0-9]\.|172\.3[01]\.|192\.168)'; then
+    echo
+    echo "This server is behind NAT. What is the public IPv4 address?"
+    read -p "Public IP address: " -e PUBLICIP
+fi
+
+# Hostname
+echo "[+] What is your Codius hostname?"
+read -p "Hostname: " -e -i codius.example.com HOSTNAME
+if [[ -z "$HOSTNAME" ]]; then
+   printf '%s\n' "No Hostname entered , exiting ..."
+   exit 1
+fi
+
+# Set hostname 
+hostnamectl set-hostname $HOSTNAME
+
+
 
 # CertBOt ==============================================
 
@@ -87,8 +119,8 @@ fi
 
 echo "server {
   listen 443 ssl;
-  ssl_certificate /keystore/$hostname-fullchain.pem;
-  ssl_certificate_key /keystore/$hostname-privkey.pem;
+  ssl_certificate /etc/letsencrypt/$hostname/fullchain.pem;
+  ssl_certificate_key /etc/letsencrypt/$hostname/privkey.pem;
   ssl_protocols TLSv1.2;
   ssl_prefer_server_ciphers on;
   ssl_dhparam /etc/nginx/dhparam.pem;
