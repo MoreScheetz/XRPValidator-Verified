@@ -146,11 +146,6 @@ echo "server {
   add_header X-Frame-Options DENY;
   add_header X-Content-Type-Options nosniff;
   add_header X-XSS-Protection '1; mode=block';
-location / {
-    proxy_pass http://127.0.0.1:51235;
-    proxy_set_header Host $$host;
-    proxy_set_header X-Forwarded-For $$remote_addr;
-  }
 }" > /etc/nginx/conf.d/validator.conf
 
 
