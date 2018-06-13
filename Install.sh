@@ -126,8 +126,8 @@ fi
 
 echo "server {
   listen 443 ssl;
-  ssl_certificate /etc/letsencrypt/$hostname/fullchain.pem;
-  ssl_certificate_key /etc/letsencrypt/$hostname/privkey.pem;
+  ssl_certificate /etc/letsencrypt/live/$HOSTNAME/fullchain.pem;
+  ssl_certificate_key /etc/letsencrypt/live/$HOSTNAME/privkey.pem;
   ssl_protocols TLSv1.2;
   ssl_prefer_server_ciphers on;
   ssl_dhparam /etc/nginx/dhparam.pem;
