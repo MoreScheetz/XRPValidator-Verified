@@ -64,17 +64,17 @@ if [[ ! -e /etc/nginx/default.d ]]; then
 	mkdir /etc/nginx/default.d
 fi
 
+echo 'return 301 https://$host$request_uri;' | sudo tee /etc/nginx/default.d/ssl-redirect.conf
+sudo openssl dhparam -out /etc/nginx/dhparam.pem 2048
+
+read -p '  Hostname: ' hostname
+hostname=$(printf "\n$hostname"|tr -d '[:space:]')
+
 if [[ ! -e /etc/nginx/conf.d ]]; then
 	mkdir /etc/nginx/conf.d
 fi
 
-                printf "\n  Ummm... What is your hostname again?"
-
-                printf "\n"
-
-                read -p '  Hostname: ' hostname
-
-                hostname=$(printf "\n$hostname"|tr -d '[:space:]')
+ 
 
 echo "server {
   listen 443 ssl;
