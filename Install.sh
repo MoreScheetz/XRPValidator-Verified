@@ -61,8 +61,8 @@ if echo "$IP" | grep -qE '^(10\.|172\.1[6789]\.|172\.2[0-9]\.|172\.3[01]\.|192\.
 fi
 
 # Hostname
-echo "[+] What is your Codius hostname?"
-read -p "Hostname: " -e -i codius.example.com HOSTNAME
+echo "[+] What is your Validator hostname?"
+read -p "Hostname: " -e -i validator.example.com HOSTNAME
 if [[ -z "$HOSTNAME" ]]; then
    printf '%s\n' "No Hostname entered , exiting ..."
    exit 1
@@ -71,7 +71,14 @@ fi
 # Set hostname 
 hostnamectl set-hostname $HOSTNAME
 
+# Email for certbot
+echo "[+] What is your Email address ?"
+read -p "Email: " -e EMAIL
 
+if [[ -z "$EMAIL" ]]; then
+    printf '%s\n' "No Email entered, exiting..."
+    exit 1
+fi
 
 # CertBOt ==============================================
 
