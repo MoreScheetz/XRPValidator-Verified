@@ -97,13 +97,11 @@ certbot certonly --manual -d "${HOSTNAME}" -d "*.${HOSTNAME}" --agree-tos --emai
 
 
 
-#Nginx ==============================================
-
-sudo apt-get update
+# Nginx ==============================================
 
 coloredEcho "\n[!] Installing Nginx ...\n" green
 # Nginx
-sudo apt-get install nginx
+sudo yum install -y nginx
 
 if pgrep systemd-journal; then
     systemctl enable nginx
@@ -115,35 +113,19 @@ if [[ ! -e /etc/nginx/default.d ]]; then
 	mkdir /etc/nginx/default.d
 fi
 
-echo 'return 301 https://$host$request_uri;' | sudo tee /etc/nginx/default.d/ssl-redirect.conf
-sudo openssl dhparam -out /etc/nginx/dhparam.pem 2048
 
 if [[ ! -e /etc/nginx/conf.d ]]; then
 	mkdir /etc/nginx/conf.d
 fi
 
- 
-
 echo "server {
   listen 443 ssl;
+  server_name $HOSTNAME;
   ssl_certificate /etc/letsencrypt/live/$HOSTNAME/fullchain.pem;
   ssl_certificate_key /etc/letsencrypt/live/$HOSTNAME/privkey.pem;
   ssl_protocols TLSv1.2;
-  ssl_prefer_server_ciphers on;
-  ssl_dhparam /etc/nginx/dhparam.pem;
-  ssl_ciphers ECDHE-RSA-AES256-GCM-SHA512:DHE-RSA-AES256-GCM-SHA512:ECDHE-RSA-AES256-GCM-SHA384:DHE-RSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-SHA384;
-  ssl_ecdh_curve secp384r1;
-  ssl_session_timeout 10m;
-  ssl_session_cache shared:SSL:10m;
-  ssl_session_tickets off;
-  ssl_stapling on;
-  ssl_stapling_verify on;
-  resolver 1.1.1.1 1.0.0.1 valid=300s;
-  resolver_timeout 5s;
-  add_header Strict-Transport-Security 'max-age=63072000; includeSubDomains; preload';
-  add_header X-Frame-Options DENY;
-  add_header X-Content-Type-Options nosniff;
-  add_header X-XSS-Protection '1; mode=block';
+
+  }
 }" > /etc/nginx/conf.d/validator.conf
 
 
@@ -154,7 +136,6 @@ else
 fi
 
 # ============================================== Nginx
-
 #Key Signing=====================
 
 docker exec rippledvalidator /keystore/finish_signing
