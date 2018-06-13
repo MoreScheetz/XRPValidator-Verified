@@ -70,8 +70,8 @@ fi
 
 echo "server {
   listen 443 ssl;
-  ssl_certificate /keystore/$dnsdomainname-fullchain.pem;
-  ssl_certificate_key /keystore/$dnsdomainname-privkey.pem;
+  ssl_certificate /keystore/$hostname-fullchain.pem;
+  ssl_certificate_key /keystore/$hostname-privkey.pem;
   ssl_protocols TLSv1.2;
   ssl_prefer_server_ciphers on;
   ssl_dhparam /etc/nginx/dhparam.pem;
