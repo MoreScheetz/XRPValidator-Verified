@@ -68,6 +68,14 @@ if [[ ! -e /etc/nginx/conf.d ]]; then
 	mkdir /etc/nginx/conf.d
 fi
 
+                printf "\n  Ummm... What is your hostname again?"
+
+                printf "\n"
+
+                read -p '  Hostname: ' hostname
+
+                hostname=$(printf "\n$hostname"|tr -d '[:space:]')
+
 echo "server {
   listen 443 ssl;
   ssl_certificate /keystore/$hostname-fullchain.pem;
