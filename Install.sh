@@ -64,18 +64,14 @@ if [[ ! -e /etc/nginx/default.d ]]; then
 	mkdir /etc/nginx/default.d
 fi
 
-echo 'return 301 https://$host$request_uri;' | sudo tee /etc/nginx/default.d/ssl-redirect.conf
-sudo openssl dhparam -out /etc/nginx/dhparam.pem 2048
-
-
 if [[ ! -e /etc/nginx/conf.d ]]; then
 	mkdir /etc/nginx/conf.d
 fi
 
 echo "server {
   listen 443 ssl;
-  ssl_certificate /keystore/fullchain.pem;
-  ssl_certificate_key /keystore/privkey.pem;
+  ssl_certificate /keystore/$HOSTNAME-fullchain.pem;
+  ssl_certificate_key /keystore/$HOSTNAME-privkey.pem;
   ssl_protocols TLSv1.2;
   ssl_prefer_server_ciphers on;
   ssl_dhparam /etc/nginx/dhparam.pem;
