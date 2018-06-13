@@ -163,10 +163,6 @@ coloredEcho "\n[!]Congratulations , it's look like Rippled Validator installed s
 coloredEcho "\n[!]Now for Verification!" green
 
 
-#FW Change=====================================
 
-ufw insert 1 allow in on eth0 to any port 80 proto tcp
-
-#=======================================FW Change
 
 
