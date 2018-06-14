@@ -201,7 +201,7 @@ hostnamectl set-hostname $HOSTNAME
     echo 'if [[ -e "/keystore/validator-keys.json" ]]; then' >> /keystore/finish_signing
     echo '    spubkey=$(cat /keystore/validator-keys.json |grep public_key|cut -d ":" -f 2|cut -d '"'"'"'"'"' -f 2)' >> /keystore/finish_signing
     echo '    if [[ "$pubkey" -eq "$spubkey" ]]; then' >> /keystore/finish_signing
-    echo "        sign3=\$(/opt/ripple/bin/validator-keys --keyfile /keystore/validator-keys.json sign $hostname)" >> /keystore/finish_signing
+    echo "        sign3=\$(/opt/ripple/bin/validator-keys --keyfile /keystore/validator-keys.json sign $HOSTNAME)" >> /keystore/finish_signing
     echo '        echo $sign3 >> /keystore/validation-data.txt' >> /keystore/finish_signing
     echo '        rm /keystore/finish_signing' >> /keystore/finish_signing
     echo '        printf "\n${PURPLE}"' >> /keystore/finish_signing
