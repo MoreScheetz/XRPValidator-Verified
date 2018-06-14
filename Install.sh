@@ -128,8 +128,8 @@ fi
 
 echo "server {
   listen 443 ssl;
-  ssl_certificate /etc/letsencrypt/live/*/fullchain.pem;
-  ssl_certificate_key /etc/letsencrypt/live/*/privkey.pem;
+  ssl_certificate /etc/letsencrypt/live/$HOSTNAME/fullchain.pem;
+  ssl_certificate_key /etc/letsencrypt/live/$HOSTNAME/privkey.pem;
   ssl_protocols TLSv1.2;
   ssl_prefer_server_ciphers on;
   ssl_dhparam /etc/nginx/dhparam.pem;
@@ -174,7 +174,7 @@ fi
 hostnamectl set-hostname $HOSTNAME
 
     printf "\n------------------------------------------------------\n"
-    signed=$(echo $pubkey|openssl dgst -sha256 -hex -sign /etc/letsencrypt/live/*/privkey.pem| tee /dev/tty)
+    signed=$(echo $pubkey|openssl dgst -sha256 -hex -sign /etc/letsencrypt/live/$HOSTNAME/privkey.pem| tee /dev/tty)
     printf "------------------------------------------------------\n"
 
     echo "Go to:" > /keystore/validation-data.txt
