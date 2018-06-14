@@ -216,6 +216,7 @@ hostnamectl set-hostname $HOSTNAME
     echo '        printf "\n    validators@ripple.com"' >> /keystore/finish_signing
     echo '        printf "\n"' >> /keystore/finish_signing
     echo '        printf ' >> /keystore/finish_signing
+    echo '	  /keystore/finish_signing
 
 
 docker exec rippledvalidator /keystore/finish_signing
