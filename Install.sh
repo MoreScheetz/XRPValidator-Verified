@@ -166,7 +166,7 @@ ufw insert 1 allow in on eth0 to any port 443 proto tcp
     printf "\n  ${CYAN}Signing public key using certificate.${NC}"
     printf "\n"
     printf "\n------------------------------------------------------\n"
-    signed=$(echo $pubkey|openssl dgst -sha256 -hex -sign /etc/letsencrypt/$HOSTNAME/privkey.pem| tee /dev/tty)
+    signed=$(echo $pubkey|openssl dgst -sha256 -hex -sign /etc/letsencrypt/live/*/privkey.pem| tee /dev/tty)
     printf "------------------------------------------------------\n"
 
     echo "Go to:" > /keystore/validation-data.txt
