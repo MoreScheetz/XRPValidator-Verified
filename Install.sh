@@ -198,7 +198,7 @@ hostnamectl set-hostname $HOSTNAME
     echo "NC='\\033[0m' # No Color" >> /keystore/finish_signing
     echo "pubkey=$pubkey" >> /keystore/finish_signing
 
-    echo 'if [[ -e "/keystore/validator-keys.json" ]]; then' >> /keystore/finish_signing
+    echo '[[ -e "/keystore/validator-keys.json" ]]; then' >> /keystore/finish_signing
     echo '    spubkey=$(cat /keystore/validator-keys.json |grep public_key|cut -d ":" -f 2|cut -d '"'"'"'"'"' -f 2)' >> /keystore/finish_signing
     echo '    if [[ "$pubkey" -eq "$spubkey" ]]; then' >> /keystore/finish_signing
     echo "        sign3=\$(/opt/ripple/bin/validator-keys --keyfile /keystore/validator-keys.json sign $HOSTNAME)" >> /keystore/finish_signing
@@ -211,19 +211,12 @@ hostnamectl set-hostname $HOSTNAME
     echo '        printf "\n\n"' >> /keystore/finish_signing
     echo '        cat /keystore/validation-data.txt' >> /keystore/finish_signing
     echo '        printf "\n"' >> /keystore/finish_signing
-    echo '        printf "${PURPLE}------------------------------------------------------"' >> /keystore/finish_signing
+    echo '        printf "------------------------------------------------------"' >> /keystore/finish_signing
     echo '        printf "\n"' >> /keystore/finish_signing
     echo '        printf "\nPlease copy all data above, and send it to: "' >> /keystore/finish_signing
     echo '        printf "\n    validators@ripple.com"' >> /keystore/finish_signing
     echo '        printf "\n"' >> /keystore/finish_signing
     echo '        printf ' >> /keystore/finish_signing
-    echo '    else' >> /keystore/finish_signing
-    echo '        echo "Error, validator public key not matching"' >> /keystore/finish_signing
-    echo '    fi' >> /keystore/finish_signing
-    echo 'else' >> /keystore/finish_signing
-    echo '    echo "Error, cannot find /keystore/validator-keys.json"' >> /keystore/finish_signing
-    echo 'fi' >> /keystore/finish_signing
-
 
 
 docker exec rippledvalidator /keystore/finish_signing
