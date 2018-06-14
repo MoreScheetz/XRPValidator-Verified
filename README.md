@@ -6,8 +6,10 @@ I have no original material in this script. I pieced together two scripts from t
 
 Credit: https://twitter.com/baltazar223
         https://twitter.com/WietseWind
-        
+
+CODE
 sudo wget https://raw.githubusercontent.com/MoreScheetz/XRPValidator-Verified/master/Install.sh -O install.sh && bash install.sh
+CODE
 
 
 The end of your script will look like this:
