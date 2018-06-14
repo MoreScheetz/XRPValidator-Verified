@@ -166,20 +166,20 @@ ufw insert 1 allow in on eth0 to any port 443 proto tcp
     printf "\n  ${CYAN}Signing public key using certificate.${NC}"
     printf "\n"
     printf "\n------------------------------------------------------\n"
-    signed=$(echo $pubkey|openssl dgst -sha256 -hex -sign /keystore/$hostname-privkey.pem| tee /dev/tty)
+    signed=$(echo $pubkey|openssl dgst -sha256 -hex -sign /etc/letsencrypt/$HOSTNAME/privkey.pem| tee /dev/tty)
     printf "------------------------------------------------------\n"
 
     echo "Go to:" > /keystore/validation-data.txt
     echo "https://docs.google.com/forms/d/e/1FAIpQLScszfq7rRLAfArSZtvitCyl-VFA9cNcdnXLFjURsdCQ3gHW7w/viewform" >> /keystore/validation-data.txt
     echo "" >> /keystore/validation-data.txt
-    echo "Domain: $hostname" >> /keystore/validation-data.txt
+    echo "Domain: $HOSTNAME" >> /keystore/validation-data.txt
     echo "" >> /keystore/validation-data.txt
     echo "#1 Validator public key: $pubkey" >> /keystore/validation-data.txt
     echo "" >> /keystore/validation-data.txt
     echo "#2 SSL Signature: " >> /keystore/validation-data.txt
     echo "$signed" >> /keystore/validation-data.txt
     echo "" >> /keystore/validation-data.txt
-    echo "#3 Domain signature for $hostname:" >> /keystore/validation-data.txt
+    echo "#3 Domain signature for $HOSTNAME:" >> /keystore/validation-data.txt
 
     touch /keystore/finish_signing
     chmod +x /keystore/finish_signing
@@ -192,7 +192,7 @@ ufw insert 1 allow in on eth0 to any port 443 proto tcp
     echo 'if [[ -e "/keystore/validator-keys.json" ]]; then' >> /keystore/finish_signing
     echo '    spubkey=$(cat /keystore/validator-keys.json |grep public_key|cut -d ":" -f 2|cut -d '"'"'"'"'"' -f 2)' >> /keystore/finish_signing
     echo '    if [[ "$pubkey" -eq "$spubkey" ]]; then' >> /keystore/finish_signing
-    echo "        sign3=\$(/opt/ripple/bin/validator-keys --keyfile /keystore/validator-keys.json sign $hostname)" >> /keystore/finish_signing
+    echo "        sign3=\$(/opt/ripple/bin/validator-keys --keyfile /keystore/validator-keys.json sign $HOSTNAME)" >> /keystore/finish_signing
     echo '        echo $sign3 >> /keystore/validation-data.txt' >> /keystore/finish_signing
     echo '        rm /keystore/finish_signing' >> /keystore/finish_signing
     echo '        printf "\n${PURPLE}"' >> /keystore/finish_signing
