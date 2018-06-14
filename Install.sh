@@ -173,9 +173,10 @@ fi
 # Set hostname 
 hostnamectl set-hostname $HOSTNAME
 
-    printf "\n------------------------------------------------------\n"
+
+    pubkey=$(cat /keystore/validator-keys.json |grep public_key|cut -d ":" -f 2|cut -d '"' -f 2)
     signed=$(echo $pubkey|openssl dgst -sha256 -hex -sign /etc/letsencrypt/live/$HOSTNAME/privkey.pem| tee /dev/tty)
-    printf "------------------------------------------------------\n"
+ 
 
     echo "Go to:" > /keystore/validation-data.txt
     echo "https://docs.google.com/forms/d/e/1FAIpQLScszfq7rRLAfArSZtvitCyl-VFA9cNcdnXLFjURsdCQ3gHW7w/viewform" >> /keystore/validation-data.txt
