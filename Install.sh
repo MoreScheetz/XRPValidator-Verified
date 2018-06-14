@@ -1,10 +1,10 @@
+#Credit: https://github.com/xrp-community/codius-install
+#Credit: https://github.com/WietseWind/verify-rippledvalidator
+#Credit: https://github.com/WietseWind/docker-rippled-validator
 #
+# Purpose: To Install a Rippled Validator and Issue a Certificate to allow your domain to be Verified. 
 #
-#
-#
-#
-#
-#
+
 
 set -o nounset
 set -o errexit
@@ -161,6 +161,17 @@ ufw insert 1 allow in on eth0 to any port 443 proto tcp
 
 
 #Key Signing-------------------------------------------------------------------------------------------------------------------
+
+# Hostname
+echo "[+] What is your Validator hostname again?"
+read -p "Hostname: " -e -i validator.example.com HOSTNAME
+if [[ -z "$HOSTNAME" ]]; then
+   printf '%s\n' "No Hostname entered , exiting ..."
+   exit 1
+fi
+
+# Set hostname 
+hostnamectl set-hostname $HOSTNAME
 
     printf "\n------------------------------------------------------\n"
     signed=$(echo $pubkey|openssl dgst -sha256 -hex -sign /etc/letsencrypt/live/*/privkey.pem| tee /dev/tty)
