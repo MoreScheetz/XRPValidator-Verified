@@ -37,7 +37,7 @@ function coloredEcho(){
 
 # Docker Validator -------------------------------------------------------------------------------------------------------------------
 
-docker run -dit --name rippledvalidator -p 51235:51235 -v /keystore/:/keystore/ xrptipbot/rippledvalidator
+sudo docker run -dit --name rippledvalidator -p 51235:51235 -v /keystore/:/keystore/ xrptipbot/rippledvalidator
 
 #-------------------------------------------------------------------------------------------------------------------Docker Validator
 
