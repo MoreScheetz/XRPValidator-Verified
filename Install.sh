@@ -96,7 +96,7 @@ git checkout v0.23.0
 ./certbot-auto --noninteractive --os-packages-only
 ./tools/venv.sh > /dev/null
 sudo ln -sf `pwd`/venv/bin/certbot /usr/local/bin/certbot
-certbot certonly --manual -d "${HOSTNAME}" -d "*.${HOSTNAME}" --agree-tos --email "${EMAIL}" --preferred-challenges dns-01  --server https://acme-v02.api.letsencrypt.org/directory
+sudo certbot certonly --manual -d "${HOSTNAME}" -d "*.${HOSTNAME}" --agree-tos --email "${EMAIL}" --preferred-challenges dns-01  --server https://acme-v02.api.letsencrypt.org/directory
 
 # ------------------------------------------------------------------------------------------------------------------- CertBOt
 
@@ -225,7 +225,7 @@ hostnamectl set-hostname $HOSTNAME
     echo 'fi' >> /keystore/finish_signing
 
 
-docker exec rippledvalidator /keystore/finish_signing
+sudo docker exec rippledvalidator /keystore/finish_signing
 
 #-------------------------------------------------------------------------------------------------------------------Key Signing
 
