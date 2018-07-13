@@ -109,13 +109,13 @@ sudo apt-get update
 sudo apt-get install nginx
 
 if pgrep systemd-journal; then
-    systemctl enable nginx
+   sudo systemctl enable nginx
 else
-    /etc/init.d/nginx enable
+    sudo /etc/init.d/nginx enable
 fi
 
 if [[ ! -e /etc/nginx/default.d ]]; then
-	mkdir /etc/nginx/default.d
+	sudo mkdir /etc/nginx/default.d
 fi
 
 echo 'return 301 https://$host$request_uri;' | sudo tee /etc/nginx/default.d/ssl-redirect.conf
@@ -123,7 +123,7 @@ sudo openssl dhparam -out /etc/nginx/dhparam.pem 2048
 
 
 if [[ ! -e /etc/nginx/conf.d ]]; then
-	mkdir /etc/nginx/conf.d
+	sudo mkdir /etc/nginx/conf.d
 fi
 
 echo "server {
@@ -146,16 +146,14 @@ echo "server {
   add_header X-Frame-Options DENY;
   add_header X-Content-Type-Options nosniff;
   add_header X-XSS-Protection '1; mode=block';
-}" > /etc/nginx/conf.d/rippled.conf
+}" > sudo /etc/nginx/conf.d/rippled.conf
 
 
 if pgrep systemd-journal; then
     systemctl restart nginx
 else
-    /etc/init.d/nginx restart
+   sudo /etc/init.d/nginx restart
 fi
-
-ufw insert 1 allow in on eth0 to any port 443 proto tcp
 
 #-------------------------------------------------------------------------------------------------------------------Nginx
 
