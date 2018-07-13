@@ -146,7 +146,7 @@ echo "server {
   add_header X-Frame-Options DENY;
   add_header X-Content-Type-Options nosniff;
   add_header X-XSS-Protection '1; mode=block';
-}" > sudo /etc/nginx/conf.d/rippled.conf
+}" > /etc/nginx/conf.d/rippled.conf
 
 
 if pgrep systemd-journal; then
