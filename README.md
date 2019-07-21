@@ -5,6 +5,9 @@ Docker Install
 
 sudo docker run -dit --restart always --name rippledvalidator -p 51235:51235 -v /keystore/:/keystore/ xrptipbot/rippledvalidator
 
+Check Logs
+
+docker logs -f rippledvalidator
 
 
 Purpose: To create a Rippled Validator, Issue SSL Cert & Assign to Nginx Web Host to be verified by Rippled and be placed in the verified Validator List.
